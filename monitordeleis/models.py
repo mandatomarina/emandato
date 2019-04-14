@@ -61,11 +61,7 @@ class Projeto(models.Model):
     prioridade = models.CharField(max_length=10, choices=PRIORIDADE_CHOICES, default='BAIXA')
     comentarios = models.ManyToManyField(Comentario, related_name='comentario_projeto', blank=True)
     importante = models.BooleanField(default=False)
-
-    def tempo_emenda(self):
-        today = date.today()
-        delta = today-self.data
-        return str(15-delta.days)+" dias"
+    obs = models.TextField(blank=True)
 
     def __str__(self):
         return self.ementa

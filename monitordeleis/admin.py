@@ -25,7 +25,7 @@ class ProjetoAdmin(admin.ModelAdmin):
             obj.idDocumento
         )
 
-    list_display = ('nome', 'proj_autores','ementa','data', 'tempo_emenda', 'tema', 'proj_url', 'importante')
+    list_display = ('nome', 'proj_autores','ementa','data', 'tema', 'proj_url', 'importante', 'obs')
     list_editable = ('tema', 'importante')
     ordering = ('-data',)
     search_fields = ('ementa',)
