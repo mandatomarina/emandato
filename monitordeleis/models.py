@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 from datetime import date
 
 PRIORIDADE_CHOICES = (
@@ -62,6 +63,7 @@ class Projeto(models.Model):
     comentarios = models.ManyToManyField(Comentario, related_name='comentario_projeto', blank=True)
     importante = models.BooleanField(default=False)
     obs = models.TextField(blank=True)
+    users = models.ManyToManyField(User)
 
     def __str__(self):
         return self.ementa

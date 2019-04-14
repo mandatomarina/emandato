@@ -9,15 +9,17 @@ class ComentarioInline(admin.TabularInline):
 
 class ProjetoAdmin(admin.ModelAdmin):
 
+    def nome(self, obj):
+        return "{} {}/{}".format(obj.natureza,obj.numero_legislativo, obj.ano_legislativo)
+
     def proj_temas(self, obj):
         return "\n".join([p.tema for p in obj.tema.all()])
 
     def proj_autores(self, obj):
         return "\n".join([p.nome for p in obj.autor.all()])
 
-    def nome(self, obj):
-        return "{} {}/{}".format(obj.natureza,obj.numero_legislativo, obj.ano_legislativo)
-
+    def visto_por(self, obj):
+        return ",".join([p.username for p in obj.users.all()])
 
     def proj_url(self,obj):
         return format_html(
@@ -25,11 +27,21 @@ class ProjetoAdmin(admin.ModelAdmin):
             obj.idDocumento
         )
 
-    list_display = ('nome', 'proj_autores','ementa','data', 'tema', 'proj_url', 'importante', 'obs')
+    def ver_projeto(self, request, queryset):
+        for projeto in queryset:
+            projeto.users.add(request.user.id)
+
+    ver_projeto.short_description = "Projeto visto"
+
+    list_display = ('nome', 'proj_autores','ementa','data', 'tema', 'proj_url', 'importante', 'obs', 'visto_por')
     list_editable = ('tema', 'importante', 'obs')
     ordering = ('-data',)
     search_fields = ('ementa',)
+    list_filter = ('tema', 'autor')
+    actions = ['ver_projeto']
     inlines = (ComentarioInline, )
+    actions_on_top=True
+    actions_on_bottom=False
 
 
 
