@@ -26,7 +26,7 @@ class ProjetoAdmin(admin.ModelAdmin):
         )
 
     list_display = ('nome', 'proj_autores','ementa','data', 'tema', 'proj_url', 'importante', 'obs')
-    list_editable = ('tema', 'importante')
+    list_editable = ('tema', 'importante', 'obs')
     ordering = ('-data',)
     search_fields = ('ementa',)
     inlines = (ComentarioInline, )
