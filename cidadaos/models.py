@@ -1,0 +1,65 @@
+from django.db import models
+
+
+class Tema(models.Model):
+    nome = models.CharField(max_length=200)
+    prioritario = models.BooleanField()
+
+    def __str__(self):
+        return self.nome
+
+class Entidade(models.Model):
+    nome = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.nome
+
+class Engajamento(models.Model):
+    nome = models.CharField(max_length=200)
+    descricao = models.TextField(blank=True)
+    rank = models.IntegerField(default=0)
+
+    def __str__(self):
+        return self.nome
+
+class Partido(models.Model):
+
+    nome = models.CharField(max_length=200)
+    sigla = models.CharField(max_length=10)
+
+# Create your models here.
+class Cidadao(models.Model):
+    class Meta():
+        verbose_name_plural = "Cidadãos"
+    nome = models.CharField(max_length=200)
+    email = models.CharField(max_length=200)
+    telefone = models.CharField(max_length=200, blank=True, null=True)
+    endereco = models.CharField(max_length=200, blank=True, null=True)
+    cidade = models.CharField(max_length=200, blank=True, null=True)
+    estado = models.CharField(max_length=2, blank=True, null=True)
+    aniversario = models.DateField(blank=True, null=True)
+    obs = models.TextField(blank=True)
+    tema = models.ManyToManyField(Tema, related_name='tema_cidadao', blank=True)
+    engajamento = models.ForeignKey(Engajamento, on_delete=models.SET_NULL, null=True, blank=True)
+    partido = models.ForeignKey(Partido, on_delete=models.SET_NULL, null=True,blank=True)
+    referencia = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
+    entidade = models.ManyToManyField(Entidade, related_name='entidade_cidadao', blank=True)
+    def __str__(self):
+        return self.nome
+
+
+class Categoria(models.Model):
+    nome = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.nome
+
+class Demanda(models.Model):
+
+    cidadao = models.ForeignKey(Cidadao, on_delete=models.CASCADE)
+    data = models.DateField()
+    categoria = models.ManyToManyField(Categoria, related_name='categoria_demanda', blank=True)
+    descritivo = models.TextField()
+
+    def __str__(self):
+        return self.descritivo

@@ -31,7 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'cidadaos.apps.CidadaosConfig',
     'monitordeleis.apps.MonitordeleisConfig',
+    'comovota.apps.ComovotaConfig',
     'suit',
     'django.contrib.admin',
     'django.contrib.auth',
