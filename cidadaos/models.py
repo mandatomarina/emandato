@@ -32,7 +32,7 @@ class Cidadao(models.Model):
     class Meta():
         verbose_name_plural = "Cidadãos"
     nome = models.CharField(max_length=200)
-    email = models.CharField(max_length=200)
+    email = models.CharField(max_length=200, unique=True, blank=True, null=True)
     telefone = models.CharField(max_length=200, blank=True, null=True)
     endereco = models.CharField(max_length=200, blank=True, null=True)
     cidade = models.CharField(max_length=200, blank=True, null=True)
@@ -55,7 +55,6 @@ class Categoria(models.Model):
         return self.nome
 
 class Demanda(models.Model):
-
     cidadao = models.ForeignKey(Cidadao, on_delete=models.CASCADE)
     data = models.DateField()
     categoria = models.ManyToManyField(Categoria, related_name='categoria_demanda', blank=True)

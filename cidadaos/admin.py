@@ -2,8 +2,6 @@ from django.contrib import admin
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda
 # Register your models here.
 
-
-
 class DemandaInline(admin.StackedInline):
     model = Demanda
     extra = 1
@@ -17,6 +15,7 @@ class CidadaoAdmin(admin.ModelAdmin):
 
     list_display = ('nome', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado')
     filter_horizontal = ('entidade', 'tema')
+    search_fields = ('nome', 'email')
     inlines = [
         DemandaInline,
     ]

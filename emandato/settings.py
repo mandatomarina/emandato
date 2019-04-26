@@ -74,6 +74,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'emandato.wsgi.application'
 
 
+SUIT_CONFIG = {
+    'ADMIN_NAME' : 'emandato'
+}
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
