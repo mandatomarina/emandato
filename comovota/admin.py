@@ -10,6 +10,7 @@ class VotoAdmin(admin.ModelAdmin):
             return obj.tipo
 
     list_display = ('nome', 'ementa_cidada', 'voto', 'justificativa', 'data')
-
+    autocomplete_fields = ['materia']
+    
 admin.site.register(Voto, VotoAdmin)
 admin.site.register(Orgao)

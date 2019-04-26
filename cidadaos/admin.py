@@ -19,6 +19,7 @@ class CidadaoAdmin(admin.ModelAdmin):
     inlines = [
         DemandaInline,
     ]
+    autocomplete_fields = ['referencia']
 
 admin.site.register(Cidadao, CidadaoAdmin)
 admin.site.register(Demanda)
