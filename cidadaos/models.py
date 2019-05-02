@@ -27,6 +27,9 @@ class Partido(models.Model):
     nome = models.CharField(max_length=200)
     sigla = models.CharField(max_length=10)
 
+    def __str__(self):
+        return self.nome
+
 # Create your models here.
 class Cidadao(models.Model):
     class Meta():
