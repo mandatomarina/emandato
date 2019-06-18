@@ -30,6 +30,8 @@ class Voto(models.Model):
     orgao = models.ForeignKey(Orgao, on_delete=models.SET_NULL, blank=True, null=True)
     resultado = models.TextField(null=True, blank=True)
     materia = models.ForeignKey(Projeto, on_delete=models.SET_NULL, blank=True, null=True)
+    public = models.BooleanField(default=False)
+    url = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.voto
