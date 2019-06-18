@@ -1,12 +1,15 @@
 from django.contrib import admin
+from import_export.admin import ImportExportModelAdmin
+from import_export import resources
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda
+
 # Register your models here.
 
 class DemandaInline(admin.StackedInline):
     model = Demanda
     extra = 1
 
-class CidadaoAdmin(admin.ModelAdmin):
+class CidadaoAdmin(ImportExportModelAdmin):
     def lista_tema(self, obj):
         return ",".join([p.nome for p in obj.tema.all()])
 
@@ -20,6 +23,12 @@ class CidadaoAdmin(admin.ModelAdmin):
         DemandaInline,
     ]
     autocomplete_fields = ['referencia']
+
+class CidadaoResource(resources.ModelResource):
+    class Meta:
+        model = Cidadao
+        import_id_fields = ('email',)
+        skip_unchanged = True
 
 admin.site.register(Cidadao, CidadaoAdmin)
 admin.site.register(Demanda)
