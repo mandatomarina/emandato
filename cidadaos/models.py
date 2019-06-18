@@ -26,9 +26,10 @@ class Partido(models.Model):
 
     nome = models.CharField(max_length=200)
     sigla = models.CharField(max_length=10)
+    bancada = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
-        return self.nome
+        return "{} ({})".format(self.nome, str(self.bancada))
 
 # Create your models here.
 class Cidadao(models.Model):

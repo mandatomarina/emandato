@@ -66,4 +66,4 @@ class Projeto(models.Model):
     users = models.ManyToManyField(User)
 
     def __str__(self):
-        return self.ementa
+        return "{} {}/{}".format(self.natureza, self.numero_legislativo, self.ano_legislativo)
