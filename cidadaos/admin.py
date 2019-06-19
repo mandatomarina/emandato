@@ -16,7 +16,7 @@ class DemandaAdmin(admin.ModelAdmin):
 
     list_filter = ['status']
 
-    ordering = ('-data')
+    ordering = ('-data',)
 
 class ParticipacaoInline(admin.StackedInline):
     model = Participacao
