@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
-from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo
+from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade
 
 # Register your models here.
 
@@ -34,6 +34,8 @@ admin.site.register(Cidadao, CidadaoAdmin)
 admin.site.register(Demanda)
 admin.site.register(Tema)
 admin.site.register(Engajamento)
+admin.site.register(Raca)
 admin.site.register(Sexo)
+admin.site.register(Escolaridade)
 admin.site.register(Partido)
 admin.site.register(Entidade)

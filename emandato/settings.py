@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*', '0.0.0.0']
 
 INSTALLED_APPS = [
     'cidadaos.apps.CidadaosConfig',
+    'participa.apps.ParticipaConfig',
     'monitordeleis.apps.MonitordeleisConfig',
     'comovota.apps.ComovotaConfig',
     'import_export',

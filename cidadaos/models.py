@@ -1,5 +1,17 @@
 from django.db import models
 
+class Escolaridade(models.Model):
+    nome = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.nome
+
+class Raca(models.Model):
+    nome = models.CharField(max_length=200)
+
+    def __str__(self):
+        return self.nome
+
 class Sexo(models.Model):
     nome = models.CharField(max_length=200)
 
@@ -41,19 +53,24 @@ class Cidadao(models.Model):
     class Meta():
         verbose_name_plural = "Cidadãos"
     nome = models.CharField(max_length=200)
+    sobrenome = models.CharField(max_length=200, blank=True, null=True)
     email = models.CharField(max_length=200, unique=True, blank=True, null=True)
     telefone = models.CharField(max_length=200, blank=True, null=True)
     endereco = models.CharField(max_length=200, blank=True, null=True)
     cidade = models.CharField(max_length=200, blank=True, null=True)
     estado = models.CharField(max_length=2, blank=True, null=True)
     aniversario = models.DateField(blank=True, null=True)
+    sexo = models.ForeignKey(Sexo, on_delete=models.SET_NULL, null=True, blank=True)
+    raca = models.ForeignKey(Raca, on_delete=models.SET_NULL, null=True, blank=True)
+    escolaridade = models.ForeignKey(Escolaridade, on_delete=models.SET_NULL, null=True, blank=True)
     obs = models.TextField(blank=True)
     tema = models.ManyToManyField(Tema, related_name='tema_cidadao', blank=True)
     engajamento = models.ForeignKey(Engajamento, on_delete=models.SET_NULL, null=True, blank=True)
     partido = models.ForeignKey(Partido, on_delete=models.SET_NULL, null=True,blank=True)
     referencia = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     entidade = models.ManyToManyField(Entidade, related_name='entidade_cidadao', blank=True)
-    sexo = models.ForeignKey(Sexo, on_delete=models.SET_NULL, null=True, blank=True)
+    novidades = models.BooleanField(default=True)
+
     def __str__(self):
         return self.nome
 
