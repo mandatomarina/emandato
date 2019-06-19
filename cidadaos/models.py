@@ -81,11 +81,18 @@ class Categoria(models.Model):
     def __str__(self):
         return self.nome
 
+DEMANDA_CHOICES = (
+    ('ABERTA', 'Em Aberto'),
+    ('ANDAMENTO', 'Em Andamento'),
+    ('FINALIZADA', 'Resolvida')
+)
+
 class Demanda(models.Model):
     cidadao = models.ForeignKey(Cidadao, on_delete=models.CASCADE)
     data = models.DateField()
     categoria = models.ManyToManyField(Categoria, related_name='categoria_demanda', blank=True)
     descritivo = models.TextField()
+    status = models.CharField(max_length=16, choices=DEMANDA_CHOICES, default='ABERTA')
 
     def __str__(self):
         return self.descritivo

@@ -10,6 +10,14 @@ class DemandaInline(admin.StackedInline):
     model = Demanda
     extra = 1
 
+class DemandaAdmin(admin.ModelAdmin):
+    list_display = ('cidadao', 'descritivo', 'data', 'status')
+    list_editable = ('status',)
+
+    list_filter = ['status']
+
+    ordering = ('-data')
+
 class ParticipacaoInline(admin.StackedInline):
     model = Participacao
     extra = 0
@@ -37,7 +45,7 @@ class CidadaoResource(resources.ModelResource):
         skip_unchanged = True
 
 admin.site.register(Cidadao, CidadaoAdmin)
-admin.site.register(Demanda)
+admin.site.register(Demanda, DemandaAdmin)
 admin.site.register(Tema)
 admin.site.register(Engajamento)
 admin.site.register(Raca)
