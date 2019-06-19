@@ -22,8 +22,8 @@ class CidadaoAdmin(ImportExportModelAdmin):
         return ",".join([p.nome for p in obj.entidade.all()])
 
     list_display = ('nome', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado')
-    filter_horizontal = ('entidade', 'tema')
     search_fields = ('nome', 'email')
+    list_filter = ['entidade', 'tema', 'engajamento']
     inlines = [
         DemandaInline,
         ParticipacaoInline,
