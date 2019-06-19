@@ -69,7 +69,7 @@ class Cidadao(models.Model):
     partido = models.ForeignKey(Partido, on_delete=models.SET_NULL, null=True,blank=True)
     referencia = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     entidade = models.ManyToManyField(Entidade, related_name='entidade_cidadao', blank=True)
-    novidades = models.BooleanField(default=True)
+    novidades = models.BooleanField(default=True, verbose_name="Quer receber novidades?")
 
     def __str__(self):
         return self.nome

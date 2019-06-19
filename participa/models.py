@@ -10,7 +10,7 @@ class Eixo(models.Model):
         return self.nome
 
 class Evento(models.Model):
-    nome = models.CharField(max_length=200)
+    nome = models.CharField(max_length=200, verbose_name="Nome do Evento")
     descricao = models.TextField(blank=True)
     data = models.DateField(blank=True, null=True)
     eixo = models.ManyToManyField(Eixo, related_name='eixo_evento', blank=True)

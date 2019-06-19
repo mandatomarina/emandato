@@ -2,12 +2,17 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade
+from participa.models import Participacao
 
 # Register your models here.
 
 class DemandaInline(admin.StackedInline):
     model = Demanda
     extra = 1
+
+class ParticipacaoInline(admin.StackedInline):
+    model = Participacao
+    extra = 0
 
 class CidadaoAdmin(ImportExportModelAdmin):
     def lista_tema(self, obj):
@@ -21,6 +26,7 @@ class CidadaoAdmin(ImportExportModelAdmin):
     search_fields = ('nome', 'email')
     inlines = [
         DemandaInline,
+        ParticipacaoInline,
     ]
     autocomplete_fields = ['referencia']
 
