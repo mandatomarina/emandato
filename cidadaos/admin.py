@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
-from import_export.widgets import ManyToManyWidget
+from import_export.widgets import ManyToManyWidget, ForeignKeyWidget
 from import_export import resources
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade
 from participa.models import Participacao
@@ -26,7 +26,7 @@ class ParticipacaoInline(admin.StackedInline):
 
 class CidadaoResource(resources.ModelResource):
     nentidade = Field(attribute="entidade",column_name='entidade',widget=ManyToManyWidget(Entidade,',', 'nome'))
-    nengajamento = Field(attribute="engajamento",column_name='engajamento',widget=ManyToManyWidget(Engajamento,',', 'nome'))
+    nengajamento = Field(attribute="engajamento",column_name='engajamento',widget=ForeignKeyWidget(Engajamento, 'nome'))
     ntema = Field(attribute="tema",column_name='tema',widget=ManyToManyWidget(Tema,',', 'nome'))
 
     class Meta:
