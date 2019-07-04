@@ -5,6 +5,7 @@ from import_export.widgets import ManyToManyWidget, ForeignKeyWidget
 from import_export import resources
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade
 from participa.models import Participacao
+from .utils import update_contacts
 
 # Register your models here.
 
@@ -53,6 +54,9 @@ class CidadaoAdmin(ImportExportModelAdmin):
         ParticipacaoInline,
     ]
     autocomplete_fields = ['referencia']
+    update_contacts.short_description = "Atualizar contatos no Google Contacts"
+
+    actions = [update_contacts]
 
 admin.site.register(Cidadao, CidadaoAdmin)
 admin.site.register(Demanda, DemandaAdmin)
