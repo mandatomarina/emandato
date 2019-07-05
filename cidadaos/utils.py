@@ -7,6 +7,7 @@ from google.auth.transport.requests import Request
 
 from django.http import JsonResponse
 
+
 def generate_credentials(SCOPES):
     """Shows basic usage of the People API.
     Prints the name of the first 10 connections.
@@ -19,8 +20,8 @@ def generate_credentials(SCOPES):
     tokenfile = os.path.join(BASE_DIR, 'token.pickle')
     credentialsfile = os.path.join(BASE_DIR, 'credentials.json')
 
-    if os.path.exists('token.pickle'):
-        with open('token.pickle', 'rb') as token:
+    if os.path.exists(tokenfile):
+        with open(tokenfile, 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -31,7 +32,7 @@ def generate_credentials(SCOPES):
                 credentialsfile, SCOPES)
             creds = flow.run_local_server()
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open(tokenfile, 'wb') as token:
             pickle.dump(creds, token)
     return creds
 
@@ -90,13 +91,19 @@ def update_contacts(modeladmin, request, queryset):
                     {
                         "name" : "Teste de importação"
                     }
+                ],
+                "userDefined" : [
+                    {
+                        "key" : "obs",
+                        "value": p.obs
+                    }
                 ]
             }
 
             if p.engajamento:
-                x['organizations'].append({ "name" : p.engajamento.nome})
+                contato['organizations'].append({ "name" : p.engajamento.nome})
 
             c = service.people().createContact(parent='people/me', body=contato).execute()
-            resultado.append(x)
+            resultado.append(contato)
 
     return JsonResponse({ "results" : resultado})
