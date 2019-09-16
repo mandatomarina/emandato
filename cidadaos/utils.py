@@ -2,10 +2,13 @@ from __future__ import print_function
 import pickle
 import os.path
 from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
+from oauth2client.contrib.django_util.storage import DjangoORMStorage
+from autoriza.models import CredentialsModel
 
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 
 
 def generate_credentials(SCOPES):
@@ -20,17 +23,14 @@ def generate_credentials(SCOPES):
     tokenfile = os.path.join(BASE_DIR, 'token.pickle')
     credentialsfile = os.path.join(BASE_DIR, 'credentials.json')
 
-    if os.path.exists(tokenfile):
-        with open(tokenfile, 'rb') as token:
-            creds = pickle.load(token)
+
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                credentialsfile, SCOPES)
-            creds = flow.run_local_server()
+            flow = Flow.from_client_secrets_file(credentialsfile, scopes=SCOPES, redirect_uri='urn:ietf:wg:oauth:2.0:oob')
+            auth_url, _ = flow.authorization_url(prompt='consent')
         # Save the credentials for the next run
         with open(tokenfile, 'wb') as token:
             pickle.dump(creds, token)
@@ -62,9 +62,10 @@ def get_agenda(service):
     return AGENDA
 
 def update_contacts(modeladmin, request, queryset):
-    # Call the People API
-    SCOPES = ['https://www.googleapis.com/auth/contacts']
-    creds = generate_credentials(SCOPES)
+
+    storage = DjangoORMStorage(CredentialsModel, 'id', request.user.id, 'credential')
+    creds = storage.get()
+    print(creds)
     service = build('people', 'v1', credentials=creds)
 
     agenda = get_agenda(service)
@@ -72,6 +73,7 @@ def update_contacts(modeladmin, request, queryset):
 
     for p in queryset.all():
         if not p.telefone in agenda:
+
             contato = {
         	    "names": [
         	        {
@@ -95,15 +97,19 @@ def update_contacts(modeladmin, request, queryset):
                 "userDefined" : [
                     {
                         "key" : "obs",
-                        "value": p.obs
+                        "value": ""
                     }
                 ]
             }
 
+            if p.obs:
+                contato['userDefined'][0]['value'] = p.obs
+                
             if p.engajamento:
                 contato['organizations'].append({ "name" : p.engajamento.nome})
 
             c = service.people().createContact(parent='people/me', body=contato).execute()
+
             resultado.append(contato)
 
     return JsonResponse({ "results" : resultado})

@@ -32,11 +32,13 @@ ALLOWED_HOSTS = ['*', '0.0.0.0']
 
 INSTALLED_APPS = [
     'cidadaos.apps.CidadaosConfig',
+    'autoriza.apps.AutorizaConfig',
     'participa.apps.ParticipaConfig',
     'monitordeleis.apps.MonitordeleisConfig',
     'comovota.apps.ComovotaConfig',
     'import_export',
     'logentry_admin',
+    'django_extensions',
     'suit',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -138,6 +140,12 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
+
+# Google API - AutorizaApp
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GOOGLE_OAUTH2_CLIENT_SECRETS_JSON = os.path.join(BASE_DIR, 'credentials.json')
+GOOGLE_SCOPES = ['https://www.googleapis.com/auth/contacts']
+DOMAIN = "http://localhost:8000"
 
 try:
     from local_settings import *
