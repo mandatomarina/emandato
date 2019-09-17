@@ -104,7 +104,7 @@ def update_contacts(modeladmin, request, queryset):
 
             if p.obs:
                 contato['userDefined'][0]['value'] = p.obs
-                
+
             if p.engajamento:
                 contato['organizations'].append({ "name" : p.engajamento.nome})
 
@@ -112,4 +112,4 @@ def update_contacts(modeladmin, request, queryset):
 
             resultado.append(contato)
 
-    return JsonResponse({ "results" : resultado})
+    modeladmin.message_user(request, '{} contatos atualizados.'.format(len(resultado)))
