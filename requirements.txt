@@ -1,0 +1,6 @@
+django
+django-import-export
+django-logentry-admin
+django-suit
+google-api-python-client
+google_auth_oauthlib
