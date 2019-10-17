@@ -113,3 +113,5 @@ def update_contacts(modeladmin, request, queryset):
             resultado.append(contato)
 
     modeladmin.message_user(request, '{} contatos atualizados.'.format(len(resultado)))
+
+update_contacts.short_description = "Atualizar contatos no Google Contacts"

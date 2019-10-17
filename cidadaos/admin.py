@@ -1,10 +1,12 @@
 from django.contrib import admin
+from django.apps import apps
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 from import_export.widgets import ManyToManyWidget, ForeignKeyWidget
 from import_export import resources
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade
 from participa.models import Participacao
+
 
 # Register your models here.
 
@@ -53,6 +55,12 @@ class CidadaoAdmin(ImportExportModelAdmin):
         ParticipacaoInline,
     ]
     autocomplete_fields = ['referencia']
+
+    if apps.is_installed("autoriza"):
+        from autoriza.utils import update_contacts
+        actions = [update_contacts]
+
+
 
 admin.site.register(Cidadao, CidadaoAdmin)
 admin.site.register(Demanda, DemandaAdmin)
