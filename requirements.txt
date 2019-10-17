@@ -4,3 +4,7 @@ django-logentry-admin
 django-suit
 google-api-python-client
 google_auth_oauthlib
+django-extensions
+mysqlclient
+decouple
+git+https://github.com/mandatomarina/oauth2client.git@master
