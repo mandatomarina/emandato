@@ -145,12 +145,12 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 IMPORT_EXPORT_USE_TRANSACTIONS = True
 
 # Google API - AutorizaApp
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 GOOGLE_OAUTH2_CLIENT_SECRETS_JSON = os.path.join(BASE_DIR, 'credentials.json')
 GOOGLE_SCOPES = ['https://www.googleapis.com/auth/contacts']
 DOMAIN = config('DOMAIN', default='http://localhost:8000')
