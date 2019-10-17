@@ -61,7 +61,6 @@ class CidadaoAdmin(ImportExportModelAdmin):
         actions = [update_contacts]
 
 
-
 admin.site.register(Cidadao, CidadaoAdmin)
 admin.site.register(Demanda, DemandaAdmin)
 admin.site.register(Tema)
