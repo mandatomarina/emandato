@@ -8,3 +8,4 @@ django-extensions
 mysqlclient
 decouple
 git+https://github.com/mandatomarina/oauth2client.git@master
+jsonpickle
