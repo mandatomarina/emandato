@@ -6,6 +6,8 @@ from import_export.widgets import ManyToManyWidget, ForeignKeyWidget
 from import_export import resources
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade
 from participa.models import Participacao
+from django.conf import settings
+
 
 
 # Register your models here.
@@ -56,10 +58,14 @@ class CidadaoAdmin(ImportExportModelAdmin):
     ]
     autocomplete_fields = ['referencia']
 
+    actions = []
     if apps.is_installed("autoriza"):
         from autoriza.utils import update_contacts
-        actions = [update_contacts]
+        actions += [update_contacts]
 
+    if settings.MAILCHIMP_API:
+        from .plugins.mailchimp import update_mailchimp
+        actions += [update_mailchimp]
 
 admin.site.register(Cidadao, CidadaoAdmin)
 admin.site.register(Demanda, DemandaAdmin)

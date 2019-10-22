@@ -155,3 +155,7 @@ GOOGLE_OAUTH2_CLIENT_SECRETS_JSON = os.path.join(BASE_DIR, 'credentials.json')
 GOOGLE_SCOPES = ['https://www.googleapis.com/auth/contacts']
 DOMAIN = config('DOMAIN', default='http://localhost:8000')
 
+#MailChimp
+MAILCHIMP_API = config('MAILCHIMP_API', default='')
+MAILCHIMP_USER=config('MAILCHIMP_USERNAME', default='')
+MAILCHIMP_LIST=config('MAILCHIMP_LIST',default='')

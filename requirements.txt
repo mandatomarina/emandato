@@ -9,3 +9,4 @@ mysqlclient
 python-decouple
 git+https://github.com/mandatomarina/oauth2client.git@master
 jsonpickle
+mailchimp3
