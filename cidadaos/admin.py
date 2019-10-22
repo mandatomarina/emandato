@@ -28,17 +28,22 @@ class ParticipacaoInline(admin.StackedInline):
     model = Participacao
     extra = 0
 
+
+class ForeignCreateWidget(ForeignKeyWidget):
+    def clean(self, value, row=None, *args, **kwargs):
+        return self.model.objects.get_or_create(nome=value)[0] if value else None
+
 class CidadaoResource(resources.ModelResource):
-    nentidade = Field(attribute="entidade",column_name='entidade',widget=ManyToManyWidget(Entidade,',', 'nome'))
-    nengajamento = Field(attribute="engajamento",column_name='engajamento',widget=ForeignKeyWidget(Engajamento, 'nome'))
-    ntema = Field(attribute="tema",column_name='tema',widget=ManyToManyWidget(Tema,',', 'nome'))
+    entidade = Field(attribute="entidade",column_name='entidade',widget=ManyToManyWidget(Entidade,',', 'nome'))
+    engajamento = Field(attribute="engajamento",column_name='engajamento',widget=ForeignCreateWidget(Engajamento, 'nome'))
+    tema = Field(attribute="tema",column_name='tema',widget=ManyToManyWidget(Tema,',', 'nome'))
 
     class Meta:
         model = Cidadao
-        import_id_fields = ('email')
-        skip_unchanged = True
-        fields = ('nome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'nentidade', 'ntema', 'nengajamento')
-        export_order = ('nome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'nentidade', 'ntema', 'nengajamento')
+        import_id_fields = ('email',)
+        skip_unchanged = False
+        fields = ('nome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema', 'engajamento')#, 'engajamento')
+        export_order = ('nome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema')#, 'engajamento')
 
 class CidadaoAdmin(ImportExportModelAdmin):
 
