@@ -8,7 +8,6 @@ from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo
 from participa.models import Participacao
 from django.conf import settings
 from django.contrib.admin import SimpleListFilter
-from .forms import RangeNumericForm
 import datetime
 
 # Register your models here.
@@ -34,6 +33,34 @@ class ParticipacaoInline(admin.StackedInline):
 class ForeignCreateWidget(ForeignKeyWidget):
     def clean(self, value, row=None, *args, **kwargs):
         return self.model.objects.get_or_create(nome=value)[0] if value else None
+
+class M2MCreateWithForeignKey(ManyToManyWidget):
+    def __init__(self, model, separator=', ', field='pk', defaults=None, create=False, *args, **kwargs):
+        self.model = model
+        self.separator = separator
+        self.field = field
+        self.defaults = defaults
+        self.create = create
+        super().__init__(self.model, separator=self.separator, field=self.field, *args, **kwargs)
+
+    def clean(self, value, row=None, *args, **kwargs):
+        values = filter(None, value.split(self.separator))
+
+        if self.create:
+            results = [self.model.objects.get_or_create(defaults=self.defaults, **{self.field:v})[0] for v in values]
+            return results
+        else:
+            try:
+                val = super().clean(value)
+            except ObjectDoesNotExist:
+                model_name = self.model.__name__
+                error = "Imported data includes nonexistant %s(s) (%s) "\
+                    "\nThis model does not support creating a new %s when importing data."\
+                    % (model_name, value, model_name)
+                logger.error(error)
+                return None
+            else:
+                return val
 
 
 #Filtro por idade
@@ -89,9 +116,9 @@ class AgeFilter(SimpleListFilter):
     
 
 class CidadaoResource(resources.ModelResource):
-    entidade = Field(attribute="entidade",column_name='entidade',widget=ManyToManyWidget(Entidade,',', 'nome'))
+    entidade = Field(attribute="entidade",column_name='entidade',widget=M2MCreateWithForeignKey(Entidade,',', 'nome', create=True))
     engajamento = Field(attribute="engajamento",column_name='engajamento',widget=ForeignCreateWidget(Engajamento, 'nome'))
-    tema = Field(attribute="tema",column_name='tema',widget=ManyToManyWidget(Tema,',', 'nome'))
+    tema = Field(attribute="tema",column_name='tema',widget=M2MCreateWithForeignKey(Tema,',', 'nome', create=True))
 
     class Meta:
         model = Cidadao
@@ -107,7 +134,10 @@ class CidadaoAdmin(ImportExportModelAdmin):
         return "{} dias atrás".format(t.days)
 
     def idade(self, obj):
-        return int((datetime.date.today()-obj.aniversario).days/365.25)
+        if obj.aniversario:
+            return int((datetime.date.today()-obj.aniversario).days/365.25)
+        else:
+            return '-'
 
     def lista_tema(self, obj):
         return ",".join([p.nome for p in obj.tema.all()])
