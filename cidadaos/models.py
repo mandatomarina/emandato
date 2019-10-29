@@ -26,6 +26,9 @@ class Tema(models.Model):
         return self.nome
 
 class Entidade(models.Model):
+    class Meta:
+        ordering = ['nome',]
+
     nome = models.CharField(max_length=200)
 
     def __str__(self):
