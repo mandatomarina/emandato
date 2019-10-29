@@ -70,6 +70,8 @@ class Cidadao(models.Model):
     referencia = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     entidade = models.ManyToManyField(Entidade, related_name='entidade_cidadao', blank=True)
     novidades = models.BooleanField(default=True, verbose_name="Quer receber novidades?")
+    created = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return self.nome
