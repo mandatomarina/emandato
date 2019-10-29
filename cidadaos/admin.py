@@ -101,6 +101,11 @@ class CidadaoResource(resources.ModelResource):
         export_order = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema')#, 'engajamento')
 
 class CidadaoAdmin(ImportExportModelAdmin):
+    
+    def atualizado(self, obj):
+        t = datetime.datetime.now(datetime.timezone.utc)-obj.updated
+        return "{} dias atrás".format(t.days)
+
     def idade(self, obj):
         return int((datetime.date.today()-obj.aniversario).days/365.25)
 
@@ -111,7 +116,7 @@ class CidadaoAdmin(ImportExportModelAdmin):
         return ",".join([p.nome for p in obj.entidade.all()])
 
     resource_class = CidadaoResource
-    list_display = ('nome', 'sobrenome', 'partido', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado', 'escolaridade', 'idade')
+    list_display = ('nome', 'sobrenome', 'partido', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado', 'escolaridade', 'idade', 'atualizado')
     search_fields = ('nome', 'sobrenome', 'email')
     list_filter = ('entidade', 'tema', 'engajamento', 'sexo', 'raca', AgeFilter, 'escolaridade', 'partido')
     inlines = [
@@ -119,6 +124,7 @@ class CidadaoAdmin(ImportExportModelAdmin):
         ParticipacaoInline,
     ]
     autocomplete_fields = ['referencia']
+    ordering = ('-updated',)
 
     actions = []
     if apps.is_installed("autoriza"):
