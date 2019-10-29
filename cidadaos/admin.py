@@ -97,8 +97,8 @@ class CidadaoResource(resources.ModelResource):
         model = Cidadao
         import_id_fields = ('email',)
         skip_unchanged = False
-        fields = ('nome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema', 'engajamento',)#, 'engajamento')
-        export_order = ('nome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema')#, 'engajamento')
+        fields = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema', 'engajamento',)#, 'engajamento')
+        export_order = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema')#, 'engajamento')
 
 class CidadaoAdmin(ImportExportModelAdmin):
     def idade(self, obj):
@@ -111,9 +111,9 @@ class CidadaoAdmin(ImportExportModelAdmin):
         return ",".join([p.nome for p in obj.entidade.all()])
 
     resource_class = CidadaoResource
-    list_display = ('nome', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado', 'idade')
-    search_fields = ('nome', 'email')
-    list_filter = ('entidade', 'tema', 'engajamento', 'sexo', 'raca', AgeFilter)
+    list_display = ('nome', 'sobrenome', 'partido', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado', 'escolaridade', 'idade')
+    search_fields = ('nome', 'sobrenome', 'email')
+    list_filter = ('entidade', 'tema', 'engajamento', 'sexo', 'raca', AgeFilter, 'escolaridade', 'partido')
     inlines = [
         DemandaInline,
         ParticipacaoInline,
