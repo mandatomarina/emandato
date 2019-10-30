@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.apps import apps
 from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
-from import_export.widgets import ManyToManyWidget, ForeignKeyWidget
+from import_export.widgets import ManyToManyWidget, ForeignKeyWidget, CharWidget
 from import_export import resources
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade
 from participa.models import Participacao
@@ -30,12 +30,20 @@ class ParticipacaoInline(admin.StackedInline):
 
 
 #Widget para criar automaticamente entidades c ForeignKey
+class DuplicateEmailWidget(CharWidget):
+    def clean(self, value, row=None, *args, **kwargs):
+        
+        if not value:
+            return row['nome'].lower()+row['sobrenome'].lower()+'@istonaoeumemail.com'
+        else:
+            return value
+
 class ForeignCreateWidget(ForeignKeyWidget):
     def clean(self, value, row=None, *args, **kwargs):
         return self.model.objects.get_or_create(nome=value)[0] if value else None
 
 class M2MCreateWithForeignKey(ManyToManyWidget):
-    def __init__(self, model, separator=', ', field='pk', defaults=None, create=False, *args, **kwargs):
+    def __init__(self, model, separator=',', field='pk', defaults=None, create=False, *args, **kwargs):
         self.model = model
         self.separator = separator
         self.field = field
@@ -44,6 +52,8 @@ class M2MCreateWithForeignKey(ManyToManyWidget):
         super().__init__(self.model, separator=self.separator, field=self.field, *args, **kwargs)
 
     def clean(self, value, row=None, *args, **kwargs):
+        if not value:
+            return []
         values = filter(None, value.split(self.separator))
 
         if self.create:
@@ -120,6 +130,7 @@ class CidadaoResource(resources.ModelResource):
     engajamento = Field(attribute="engajamento",column_name='engajamento',widget=ForeignCreateWidget(Engajamento, 'nome'))
     tema = Field(attribute="tema",column_name='tema',widget=M2MCreateWithForeignKey(Tema,',', 'nome', create=True))
     sexo = Field(attribute="sexo",column_name='sexo',widget=ForeignKeyWidget(Sexo, 'nome'))
+    email = Field(attribute="email",column_name='email',widget=DuplicateEmailWidget())
 
 
     class Meta:
