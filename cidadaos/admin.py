@@ -126,8 +126,8 @@ class CidadaoResource(resources.ModelResource):
         model = Cidadao
         import_id_fields = ('email',)
         skip_unchanged = False
-        fields = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema', 'engajamento',)#, 'engajamento')
-        export_order = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema')#, 'engajamento')
+        fields = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
+        export_order = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
 
 class CidadaoAdmin(ImportExportModelAdmin):
     
