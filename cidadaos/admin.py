@@ -4,7 +4,7 @@ from import_export.admin import ImportExportModelAdmin
 from import_export.fields import Field
 from import_export.widgets import ManyToManyWidget, ForeignKeyWidget, CharWidget
 from import_export import resources
-from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade
+from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade, Cargo
 from participa.models import Participacao
 from django.conf import settings
 from django.contrib.admin import SimpleListFilter
@@ -189,7 +189,7 @@ class CidadaoAdmin(ImportExportModelAdmin):
         ParticipacaoInline,
     ]
     autocomplete_fields = ['referencia']
-    ordering = ('-updated',)
+    ordering = ('-updated', 'nome', 'sobrenome')
 
     actions = []
     if apps.is_installed("autoriza"):
