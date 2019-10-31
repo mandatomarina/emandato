@@ -202,6 +202,7 @@ class CidadaoAdmin(ImportExportModelAdmin):
 
 admin.site.register(Cidadao, CidadaoAdmin)
 admin.site.register(Demanda, DemandaAdmin)
+admin.site.register(Cargo)
 admin.site.register(Tema)
 admin.site.register(Engajamento)
 admin.site.register(Raca)
