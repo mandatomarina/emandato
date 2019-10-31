@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import validate_email
 import datetime
 
 class Escolaridade(models.Model):
@@ -64,7 +65,7 @@ class Cidadao(models.Model):
         verbose_name_plural = "Cidadãos"
     nome = models.CharField(max_length=200)
     sobrenome = models.CharField(max_length=200, blank=True, null=True)
-    email = models.CharField(max_length=200, unique=True, blank=True, null=True)
+    email = models.CharField(max_length=200, unique=True, blank=True, null=True, validators=[validate_email])
     telefone = models.CharField(max_length=200, blank=True, null=True)
     endereco = models.CharField(max_length=200, blank=True, null=True)
     cidade = models.CharField(max_length=200, blank=True, null=True)
