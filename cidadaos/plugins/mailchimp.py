@@ -32,7 +32,7 @@ def update_mailchimp(modeladmin, request, queryset):
                 'PHONE' : p.telefone,
                 'ADDRESS' : p.endereco,
                 'GENDER' :  p.sexo.nome,
-                'AGE' : p.idade()
+                'AGE' : int(p.idade())
             },
             'tags' : [],
         }

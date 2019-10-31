@@ -88,7 +88,7 @@ class Cidadao(models.Model):
         if self.aniversario:
             return int((datetime.date.today()-self.aniversario).days/365.25)
         else:
-            return '-'
+            return None
 
     
     def __str__(self):
