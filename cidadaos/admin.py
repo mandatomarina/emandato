@@ -42,6 +42,24 @@ class ForeignCreateWidget(ForeignKeyWidget):
     def clean(self, value, row=None, *args, **kwargs):
         return self.model.objects.get_or_create(nome=value)[0] if value else None
 
+class M2MField(Field):
+      def save(self, obj, data, replace=False):
+        """
+        Acrescenta itens
+        """
+        if not self.readonly:
+            attrs = self.attribute.split('__')
+            for attr in attrs[:-1]:
+                obj = getattr(obj, attr, None)
+            cleaned = self.clean(data)
+            print(cleaned)
+            if cleaned is not None or self.saves_null_values:
+                if not replace:
+                    setattr(obj, attrs[-1], cleaned)
+                else:
+                    for item in cleaned:
+                        getattr(obj, attrs[-1]).add(item)
+
 class M2MCreateWithForeignKey(ManyToManyWidget):
     def __init__(self, model, separator=',', field='pk', defaults=None, create=False, *args, **kwargs):
         self.model = model
@@ -126,7 +144,7 @@ class AgeFilter(SimpleListFilter):
     
 
 class CidadaoResource(resources.ModelResource):
-    entidade = Field(attribute="entidade",column_name='entidade',widget=M2MCreateWithForeignKey(Entidade,',', 'nome', create=True))
+    entidade = M2MField(attribute="entidade",column_name='entidade',widget=M2MCreateWithForeignKey(Entidade,',', 'nome', create=True))
     engajamento = Field(attribute="engajamento",column_name='engajamento',widget=ForeignCreateWidget(Engajamento, 'nome'))
     tema = Field(attribute="tema",column_name='tema',widget=M2MCreateWithForeignKey(Tema,',', 'nome', create=True))
     sexo = Field(attribute="sexo",column_name='sexo',widget=ForeignKeyWidget(Sexo, 'nome'))
