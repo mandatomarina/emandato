@@ -31,7 +31,7 @@ def update_mailchimp(modeladmin, request, queryset):
                 'EVENTS' : '',
                 'PHONE' : p.telefone,
                 'ADDRESS' : p.endereco,
-                'GENDER' :  p.sexo,
+                'GENDER' :  p.sexo.nome,
                 'AGE' : p.idade
             },
             'tags' : [],
