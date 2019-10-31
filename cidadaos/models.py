@@ -1,4 +1,5 @@
 from django.db import models
+import datetime
 
 class Escolaridade(models.Model):
     nome = models.CharField(max_length=200)
@@ -83,6 +84,13 @@ class Cidadao(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def idade(self):
+        if self.aniversario:
+            return int((datetime.date.today()-self.aniversario).days/365.25)
+        else:
+            return '-'
+
+    
     def __str__(self):
         return self.nome
 

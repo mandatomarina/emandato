@@ -32,7 +32,7 @@ class ParticipacaoInline(admin.StackedInline):
 #Widget para criar automaticamente entidades c ForeignKey
 class DuplicateEmailWidget(CharWidget):
     def clean(self, value, row=None, *args, **kwargs):
-        
+        return value
         if not value:
             return row['nome'].lower()+row['sobrenome'].lower()+'@istonaoeumemail.com'
         else:
@@ -43,7 +43,11 @@ class ForeignCreateWidget(ForeignKeyWidget):
         return self.model.objects.get_or_create(nome=value)[0] if value else None
 
 class M2MField(Field):
-      def save(self, obj, data, replace=False):
+    def __init__(self, replace=True, *args, **kwargs):
+        self.replace = replace
+        super().__init__(*args, **kwargs)
+
+    def save(self, obj, data, is_m2m=True):
         """
         Acrescenta itens
         """
@@ -52,14 +56,13 @@ class M2MField(Field):
             for attr in attrs[:-1]:
                 obj = getattr(obj, attr, None)
             cleaned = self.clean(data)
-            print(cleaned)
             if cleaned is not None or self.saves_null_values:
-                if not replace:
-                    setattr(obj, attrs[-1], cleaned)
-                else:
+                if self.replace:
                     for item in cleaned:
                         getattr(obj, attrs[-1]).add(item)
-
+                else:
+                    getattr(obj, attrs[-1]).set(cleaned)
+                    
 class M2MCreateWithForeignKey(ManyToManyWidget):
     def __init__(self, model, separator=',', field='pk', defaults=None, create=False, *args, **kwargs):
         self.model = model
@@ -144,19 +147,20 @@ class AgeFilter(SimpleListFilter):
     
 
 class CidadaoResource(resources.ModelResource):
-    entidade = M2MField(attribute="entidade",column_name='entidade',widget=M2MCreateWithForeignKey(Entidade,',', 'nome', create=True))
+    tema = M2MField(attribute="tema",column_name='tema',widget=M2MCreateWithForeignKey(Tema,',', 'nome', create=True))
     engajamento = Field(attribute="engajamento",column_name='engajamento',widget=ForeignCreateWidget(Engajamento, 'nome'))
-    tema = Field(attribute="tema",column_name='tema',widget=M2MCreateWithForeignKey(Tema,',', 'nome', create=True))
+    entidade = M2MField(attribute="entidade",column_name='entidade',widget=M2MCreateWithForeignKey(Entidade,',', 'nome', create=True))
+    cargo = Field(attribute="cargo",column_name='cargo',widget=ForeignKeyWidget(Cargo, 'nome'))
     sexo = Field(attribute="sexo",column_name='sexo',widget=ForeignKeyWidget(Sexo, 'nome'))
     email = Field(attribute="email",column_name='email',widget=DuplicateEmailWidget())
 
 
     class Meta:
         model = Cidadao
-        import_id_fields = ('email',)
-        skip_unchanged = False
-        fields = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
-        export_order = ('nome', 'sobrenome', 'email', 'telefone', 'cidade', 'estado', 'sexo', 'raca', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
+        import_id_fields = ('email', 'telefone',)
+        skip_unchanged = True
+        fields = ('nome', 'sobrenome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'sexo', 'raca', 'cargo', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
+        export_order = ('nome', 'sobrenome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'sexo', 'raca', 'cargo', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
 
 class CidadaoAdmin(ImportExportModelAdmin):
     
