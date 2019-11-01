@@ -12,7 +12,8 @@ from .models import CredentialsModel
 flow = flow_from_clientsecrets(
     settings.GOOGLE_OAUTH2_CLIENT_SECRETS_JSON,
     scope=settings.GOOGLE_SCOPES,
-    redirect_uri=settings.DOMAIN+'/autoriza/oauth2callback/')
+    redirect_uri=settings.DOMAIN+'/autoriza/oauth2callback/',
+    prompt='consent')
 
 class AuthorizeView(View):
     def get(self, request, *args, **kwargs):
