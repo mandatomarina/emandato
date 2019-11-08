@@ -26,7 +26,11 @@ class AuthorizeView(View):
                 settings.SECRET_KEY, request.user)
             authorize_url = flow.step1_get_authorize_url()
             return redirect(authorize_url)
-        return redirect('/')
+        referer = request.META.get('HTTP_REFERER')
+        if not referer:
+            return redirect("/")
+        else:
+            return redirect(referer)
 
 class Oauth2CallbackView(View):
     def get(self, request, *args, **kwargs):
@@ -38,4 +42,8 @@ class Oauth2CallbackView(View):
         storage = DjangoORMStorage(
             CredentialsModel, 'id', request.user.id, 'credential')
         storage.put(credential)
-        return redirect('/')
+        referer = request.META.get('HTTP_REFERER')
+        if not referer:
+            return redirect("/")
+        else:
+            return redirect(referer)
