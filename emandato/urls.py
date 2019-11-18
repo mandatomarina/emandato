@@ -21,4 +21,5 @@ urlpatterns = [
     path('monitor', include('monitordeleis.urls')),
     path('votos', include('comovota.urls')),
     path('autoriza/', include('autoriza.urls')),
+    path('siscom/', include('siscom.urls')),
 ]

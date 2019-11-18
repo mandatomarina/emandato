@@ -33,6 +33,7 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS',
 # Application definition
 
 INSTALLED_APPS = [
+    'siscom.apps.SiscomConfig',
     'cidadaos.apps.CidadaosConfig',
     'autoriza.apps.AutorizaConfig',
     'participa.apps.ParticipaConfig',
