@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'participa.apps.ParticipaConfig',
     'monitordeleis.apps.MonitordeleisConfig',
     'comovota.apps.ComovotaConfig',
+    'emendas.apps.EmendasConfig',
     'import_export',
     'logentry_admin',
     'django_extensions',

@@ -1,7 +1,9 @@
 from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
+from import_export import resources
 from cidadaos.admin import M2MField, M2MCreateWithForeignKey
 from .models import Emenda, Orgao, Fase, Territorio
+from cidadaos.models import Tema
 # Register your models here.
 
 class EmendaResource(resources.ModelResource):
