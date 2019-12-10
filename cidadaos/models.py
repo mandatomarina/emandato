@@ -38,6 +38,9 @@ class Entidade(models.Model):
         ordering = ['nome',]
 
     nome = models.CharField(max_length=200)
+    cnpj = models.CharField(max_length=200, blank=True, null=True)
+    tipo = models.CharField(max_length=20, choices=ENTIDADE_CHOICE, default='ENTIDADE')
+
 
     def __str__(self):
         return self.nome
