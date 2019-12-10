@@ -39,7 +39,7 @@ class Entidade(models.Model):
 
     nome = models.CharField(max_length=200)
     cnpj = models.CharField(max_length=200, blank=True, null=True)
-    tipo = models.CharField(max_length=20, choices=ENTIDADE_CHOICE, default='ENTIDADE')
+    tipo = models.CharField(max_length=200, blank=True, null=True)
 
 
     def __str__(self):
