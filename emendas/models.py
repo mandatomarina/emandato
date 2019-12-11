@@ -17,7 +17,7 @@ class Territorio(models.Model):
     nome = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
-        return self.nome
+        return str(self.nome) if self.nome else ''
         
 class Emenda(models.Model):
     tema = models.ForeignKey(Tema, on_delete=models.SET_NULL, null=True, blank=True)
@@ -34,4 +34,4 @@ class Emenda(models.Model):
 
 
     def __str__(self):
-        return self.projeto
+        return str(self.projeto) if self.projeto else ''
