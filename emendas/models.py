@@ -16,6 +16,9 @@ class Fase(models.Model):
 class Territorio(models.Model):
     nome = models.CharField(max_length=200, blank=True, null=True)
 
+    def __str__(self):
+        return self.nome
+        
 class Emenda(models.Model):
     tema = models.ForeignKey(Tema, on_delete=models.SET_NULL, null=True, blank=True)
     recurso =  models.CharField(max_length=16, choices=RECURSO_CHOICES, default='GERAL')
@@ -27,3 +30,8 @@ class Emenda(models.Model):
     tecnico = models.ForeignKey(Cidadao, on_delete=models.SET_NULL, related_name='tecnica_emenda', null=True, blank=True)
     orgao = models.ForeignKey(Orgao, on_delete=models.SET_NULL, null=True, blank=True)
     territorio = models.ManyToManyField(Territorio, related_name='territorio_emenda', blank=True)
+    valor = models.FloatField(blank=True, null=True)
+
+
+    def __str__(self):
+        return self.projeto
