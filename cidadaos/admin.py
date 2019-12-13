@@ -172,12 +172,20 @@ class CidadaoResource(resources.ModelResource):
                 if field_name not in row:
                     return
             if row['email'] == None:
-                print(row['nome'])
                 self._meta.import_id_fields = ('telefone',)
             else:
                 self._meta.import_id_fields = ('email',)
 
             return instance_loader.get_instance(row)
+  
+    def import_field(self, field, obj, data, is_m2m=False):
+            """
+            Calls :meth:`import_export.fields.Field.save` if ``Field.attribute``
+            and ``Field.column_name`` are found in ``data``.
+            """
+            if field.attribute and field.column_name in data:
+                if data[field.attribute] != None:
+                    field.save(obj, data, is_m2m)
 
 class CidadaoAdmin(ImportExportModelAdmin):
     
