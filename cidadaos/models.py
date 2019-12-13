@@ -79,7 +79,7 @@ class Cidadao(models.Model):
     escolaridade = models.ForeignKey(Escolaridade, on_delete=models.SET_NULL, null=True, blank=True)
     obs = models.TextField(blank=True)
     tema = models.ManyToManyField(Tema, related_name='tema_cidadao', blank=True)
-    engajamento = models.ForeignKey(Engajamento, on_delete=models.SET_NULL, null=True, blank=True)
+    engajamento = models.ManyToManyField(Engajamento, blank=True)
     partido = models.ForeignKey(Partido, on_delete=models.SET_NULL, null=True,blank=True)
     referencia = models.ForeignKey('self', on_delete=models.SET_NULL, null=True, blank=True)
     entidade = models.ManyToManyField(Entidade, related_name='entidade_cidadao', blank=True)

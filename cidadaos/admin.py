@@ -148,7 +148,7 @@ class AgeFilter(SimpleListFilter):
 
 class CidadaoResource(resources.ModelResource):
     tema = M2MField(attribute="tema",column_name='tema',widget=M2MCreateWithForeignKey(Tema,',', 'nome', create=True))
-    engajamento = Field(attribute="engajamento",column_name='engajamento',widget=ForeignCreateWidget(Engajamento, 'nome'))
+    engajamento = M2MField(attribute="engajamento",column_name='engajamento',widget=M2MCreateWithForeignKey(Engajamento,',', 'nome', create=True))
     entidade = M2MField(attribute="entidade",column_name='entidade',widget=M2MCreateWithForeignKey(Entidade,',', 'nome', create=True))
     cargo = Field(attribute="cargo",column_name='cargo',widget=ForeignKeyWidget(Cargo, 'nome'))
     sexo = Field(attribute="sexo",column_name='sexo',widget=ForeignKeyWidget(Sexo, 'nome'))
