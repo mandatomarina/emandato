@@ -157,10 +157,27 @@ class CidadaoResource(resources.ModelResource):
 
     class Meta:
         model = Cidadao
-        import_id_fields = ('email', 'telefone',)
+        import_id_fields = ('email',)
         skip_unchanged = True
         fields = ('nome', 'sobrenome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'sexo', 'raca', 'cargo', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
         export_order = ('nome', 'sobrenome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'sexo', 'raca', 'cargo', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
+
+    def get_instance(self, instance_loader, row):
+            """
+            If all 'import_id_fields' are present in the dataset, calls
+            the :doc:`InstanceLoader <api_instance_loaders>`. Otherwise,
+            returns `None`.
+            """
+            for field_name in self.get_import_id_fields():
+                if field_name not in row:
+                    return
+            if row['email'] == None:
+                print(row['nome'])
+                self._meta.import_id_fields = ('telefone',)
+            else:
+                self._meta.import_id_fields = ('email',)
+
+            return instance_loader.get_instance(row)
 
 class CidadaoAdmin(ImportExportModelAdmin):
     
