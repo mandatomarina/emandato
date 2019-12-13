@@ -184,6 +184,8 @@ class CidadaoAdmin(ImportExportModelAdmin):
     list_display = ('nome', 'sobrenome', 'partido', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado', 'escolaridade', 'idade', 'atualizado')
     search_fields = ('nome', 'sobrenome', 'email')
     list_filter = ('entidade', 'tema', 'engajamento', 'sexo', 'raca', AgeFilter, 'escolaridade', 'partido')
+    list_per_page = 100
+
     inlines = [
         DemandaInline,
         ParticipacaoInline,
