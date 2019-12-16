@@ -86,7 +86,7 @@ def update_contacts(modeladmin, request, queryset):
             for o in p.engajamento.all():
                 contato['organizations'].append({ "name" : o.nome})
 
-            c = service.people().createContact(parent='people/me', body=contato).execute()
+            c = service.people().createContact(body=contato).execute()
 
             resultado.append(contato)
 
