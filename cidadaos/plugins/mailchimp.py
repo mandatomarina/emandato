@@ -27,7 +27,7 @@ def update_mailchimp(modeladmin, request, queryset):
                 'CITY' : p.cidade,
                 'STATE' : p.estado,
                 'ORG' : p.entidade.first().nome if p.entidade.first() else '',
-                'SENSIBLE' : p.engajamento.nome if p.engajamento else '',
+                'SENSIBLE' : '',
                 'EVENTS' : '',
                 'PHONE' : p.telefone,
                 'ADDRESS' : p.endereco,
