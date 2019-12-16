@@ -83,7 +83,7 @@ def update_contacts(modeladmin, request, queryset):
             if p.obs:
                 contato['userDefined'][0]['value'] = p.obs
 
-            for o in p.engajamento:
+            for o in p.engajamento.all():
                 contato['organizations'].append({ "name" : o.nome})
 
             c = service.people().createContact(parent='people/me', body=contato).execute()
