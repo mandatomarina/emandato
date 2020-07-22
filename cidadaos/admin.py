@@ -5,7 +5,7 @@ from import_export.fields import Field
 from import_export.widgets import ManyToManyWidget, ForeignKeyWidget, CharWidget
 from import_export import resources
 from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo, Raca, Escolaridade, Cargo
-from participa.models import Participacao
+from participa.models import Participacao, Evento
 from django.conf import settings
 from django.contrib.admin import SimpleListFilter
 import datetime
@@ -93,6 +93,20 @@ class M2MCreateWithForeignKey(ManyToManyWidget):
             else:
                 return val
 
+class M2MCreateParticipacao(ManyToManyWidget):
+    def __init__(self, model=Participacao, separator=',', field='pk', *args, **kwargs):
+        super().__init__(Participacao, separator=self.separator, field=self.field, *args, **kwargs)
+
+    def clean(self, value, row=None, *args, **kwargs):
+        if not value: #checa se campo esta preenchido
+            return []
+        values = filter(None, value.split(self.separator)) #separa o campo por 'separator'
+
+        print(values)
+        results = []
+        for v in values:
+            e = Eventos.objects.get_or_create(nome=v)
+            p = Participacao.objects.create(evento=e, cidadao=e)
 
 #Filtro por idade
 class AgeFilter(SimpleListFilter):
@@ -158,7 +172,7 @@ class CidadaoResource(resources.ModelResource):
     class Meta:
         model = Cidadao
         import_id_fields = ('email',)
-        skip_unchanged = True
+        skip_unchanged = False
         fields = ('nome', 'sobrenome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'sexo', 'raca', 'cargo', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
         export_order = ('nome', 'sobrenome', 'email', 'telefone', 'endereco', 'cidade', 'estado', 'sexo', 'raca', 'cargo', 'entidade', 'tema', 'engajamento', 'aniversario')#, 'engajamento')
 
@@ -186,6 +200,15 @@ class CidadaoResource(resources.ModelResource):
             if field.attribute and field.column_name in data:
                 if data[field.attribute] != None:
                     field.save(obj, data, is_m2m)
+    
+    def after_import_row(self, row, row_result, row_number=None, **kwargs):
+        #Importa eventos
+        if 'evento' in row and row['evento'] != '':
+            cid = row_result.object_id
+            e, e_created = Evento.objects.get_or_create(nome=row['evento'])
+            c = Cidadao.objects.get(pk=cid)
+            p, p_created = Participacao.objects.get_or_create(evento=e, cidadao=c)
+            
 
 class CidadaoAdmin(ImportExportModelAdmin):
     
@@ -212,7 +235,6 @@ class CidadaoAdmin(ImportExportModelAdmin):
     list_per_page = 100
 
     inlines = [
-        DemandaInline,
         ParticipacaoInline,
     ]
     autocomplete_fields = ['referencia']
