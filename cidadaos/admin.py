@@ -197,11 +197,10 @@ class CidadaoResource(resources.ModelResource):
             """
             Calls :meth:`import_export.fields.Field.save` if ``Field.attribute``
             and ``Field.column_name`` are found in ``data``.
+            Ignora campos vazios na importação.
             """
             if field.attribute and field.column_name in data:
                 if data[field.attribute] != None and data[field.attribute] != '':
-                    print(field.attribute)
-                    print(data[field.attribute])
                     field.save(obj, data, is_m2m)
     
     def after_import_row(self, row, row_result, row_number=None, **kwargs):
