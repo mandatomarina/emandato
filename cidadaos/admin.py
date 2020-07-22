@@ -8,6 +8,7 @@ from .models import Cidadao, Tema, Engajamento, Partido, Entidade, Demanda, Sexo
 from participa.models import Participacao, Evento
 from django.conf import settings
 from django.contrib.admin import SimpleListFilter
+from django.db.models import Count
 import datetime
 
 # Register your models here.
@@ -158,7 +159,45 @@ class AgeFilter(SimpleListFilter):
         )
         yield choice
 
-    
+#Filtro por idade
+class ParticipaFilter(SimpleListFilter):
+    title = 'participacao' # or use _('country') for translated title
+    template = 'filter_numeric_range.html'
+    parameter_name = 'participa_from'    
+        
+    def __init__(self, field, request, params, model):
+        super().__init__(field, request, params, model)
+        self.request = request
+
+    def lookups(self, request, model_admin):
+        return ((1337, 1337))
+
+    def queryset(self, request, queryset):
+        filters = {}
+        values = self.used_parameters.get('participa_from', None)
+        
+        try:
+            values = int(values)
+        except:
+            values = None
+
+        if values is not None and values != '':
+            filters.update({
+                'num_eventos__gte': values,
+            })
+
+        return queryset.annotate(num_eventos=Count('evento')).filter(**filters)
+
+
+    def choices(self, changelist):
+        # Grab only the "all" option.
+        choice = next(super().choices(changelist))
+        choice['query_parts'] = (
+            (k, v)
+            for k, v in changelist.get_filters_params().items()
+            if k not in [self.parameter_name]
+        )
+        yield choice
 
 class CidadaoResource(resources.ModelResource):
     tema = M2MField(attribute="tema",column_name='tema',widget=M2MCreateWithForeignKey(Tema,',', 'nome', create=True))
@@ -233,12 +272,12 @@ class CidadaoAdmin(ImportExportModelAdmin):
     def conta_participacao(self, obj):
         return Participacao.objects.filter(cidadao=obj.pk).count()
 
-    conta_participacao.short_description = 'Eventos'
+    conta_participacao.short_description = 'Eventossqc'
 
     resource_class = CidadaoResource
     list_display = ('nome', 'sobrenome', 'partido', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado', 'escolaridade', 'idade', 'atualizado', 'conta_participacao')
     search_fields = ('nome', 'sobrenome', 'email')
-    list_filter = ('entidade', 'tema', 'engajamento', 'sexo', 'raca', AgeFilter, 'escolaridade', 'partido')
+    list_filter = ('entidade', 'tema', 'engajamento', 'sexo', 'raca', AgeFilter, ParticipaFilter, 'escolaridade', 'partido')
     list_per_page = 100
 
     inlines = [

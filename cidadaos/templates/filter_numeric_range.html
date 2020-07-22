@@ -9,7 +9,7 @@
             {% endfor %}
 
             <input  type="text"
-                    placeholder="Idade"
+                    placeholder="{{title}}"
                     value="{{ spec.value|default_if_none:'' }}"
                     name="{{ spec.parameter_name }}"/>
 
