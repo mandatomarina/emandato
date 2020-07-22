@@ -230,8 +230,13 @@ class CidadaoAdmin(ImportExportModelAdmin):
     def lista_entidade(self, obj):
         return ",".join([p.nome for p in obj.entidade.all()])
 
+    def conta_participacao(self, obj):
+        return Participacao.objects.filter(cidadao=obj.pk).count()
+
+    conta_participacao.short_description = 'Eventos'
+
     resource_class = CidadaoResource
-    list_display = ('nome', 'sobrenome', 'partido', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado', 'escolaridade', 'idade', 'atualizado')
+    list_display = ('nome', 'sobrenome', 'partido', 'lista_entidade', 'lista_tema', 'email', 'telefone', 'cidade', 'estado', 'escolaridade', 'idade', 'atualizado', 'conta_participacao')
     search_fields = ('nome', 'sobrenome', 'email')
     list_filter = ('entidade', 'tema', 'engajamento', 'sexo', 'raca', AgeFilter, 'escolaridade', 'partido')
     list_per_page = 100
