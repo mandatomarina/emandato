@@ -181,6 +181,7 @@ class CidadaoResource(resources.ModelResource):
             If all 'import_id_fields' are present in the dataset, calls
             the :doc:`InstanceLoader <api_instance_loaders>`. Otherwise,
             returns `None`.
+            Modificado para suportar telefone OU email como chaves unicas de importação
             """
             for field_name in self.get_import_id_fields():
                 if field_name not in row:
@@ -198,7 +199,9 @@ class CidadaoResource(resources.ModelResource):
             and ``Field.column_name`` are found in ``data``.
             """
             if field.attribute and field.column_name in data:
-                if data[field.attribute] != None:
+                if data[field.attribute] != None and data[field.attribute] != '':
+                    print(field.attribute)
+                    print(data[field.attribute])
                     field.save(obj, data, is_m2m)
     
     def after_import_row(self, row, row_result, row_number=None, **kwargs):
